@@ -4,7 +4,7 @@ import { Route } from 'react-router-dom';
 // Components
 import InitPage from './page/InitPage';
 import TourPage from './tour/TourPage';
-
+import Admin from './admin/Admin';
 // Style
 import { withStyles } from '@material-ui/core/styles';
 
@@ -51,6 +51,7 @@ class App extends Component {
         <Route exact path='/' render={(props)=><InitPage routing={props}/>}/>
         <Route exact path='/tour/:tour_id' render={(props)=><TourPage routing={props}/>}/>
         <div className="fb-customerchat" data-page_id="1726420851006429" data-ref=""></div>
+        <Route path='/admin' render={(props) =><Admin routing={props}/>} /> 
       </div>
     )
   }
