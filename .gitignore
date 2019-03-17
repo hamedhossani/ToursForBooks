@@ -21,6 +21,10 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+database-debug.log*
+functions/database-debug.log
+functions/yarn-debug.log
+functions/yarn.lock
 
 .env
 yarn.lock
