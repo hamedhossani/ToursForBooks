@@ -1,31 +1,31 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
 // Style
-import widthWidth from "../utils/withWidth";
-import breakpoints from "../theme/breakpoints";
-import { withStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
+import widthWidth from '../utils/withWidth'
+import breakpoints from '../theme/breakpoints'
+import { withStyles } from '@material-ui/core/styles'
+import Grid from '@material-ui/core/Grid'
 
 // Components
-import TourDetail from "./TourDetail";
-import TourPrice from "./TourPrice";
-import TourBook from "./TourBook";
-import ContactUs from "../page/ContactUs";
+import TourDetail from './TourDetail'
+import TourPrice from './TourPrice'
+import TourBook from './TourBook'
+import ContactUs from '../page/ContactUs'
 
 // Store
-import { fetchOneTourById } from "./action";
-import Divider from "@material-ui/core/Divider";
+import { fetchOneTourById } from './action'
+import Divider from '@material-ui/core/Divider'
 
 class TourPage extends Component {
   componentWillMount() {
-    const tour_id = this.props.routing.match.params.tour_id;
-    this.props.dispatchFetchOneTour(tour_id);
+    const tour_id = this.props.routing.match.params.tour_id
+    this.props.dispatchFetchOneTour(tour_id)
   }
 
   render() {
-    const { classes } = this.props;
-    const { tour, isFetching } = this.props;
+    const { classes } = this.props
+    const { tour, isFetching } = this.props
     return (
       <div>
         {!isFetching ? (
@@ -42,12 +42,12 @@ class TourPage extends Component {
             </Grid>
           </div>
         ) : (
-          ""
+          ''
         )}
         <Divider />
         <ContactUs />
       </div>
-    );
+    )
   }
 }
 
@@ -55,25 +55,25 @@ const styles = theme => ({
   root: {
     flexGrow: 1,
     marginTop: 30,
-    padding: "0 2% 5% 2%"
+    padding: '0 2% 5% 2%'
   },
-  [`@media (min-width: ${breakpoints["md"]}px)`]: {
+  [`@media (min-width: ${breakpoints['md']}px)`]: {
     root: {
-      padding: "0 10% 5% 10%"
+      padding: '0 10% 5% 10%'
     }
   }
-});
+})
 
 const mapStateToProps = (state, ownProps) => {
-  const { tour, isFetching } = state.ToursReducer.CurrentToursReducer;
-  return { tour, isFetching };
-};
+  const { tour, isFetching } = state.ToursReducer.CurrentToursReducer
+  return { tour, isFetching }
+}
 
 const mapDispatchToProps = dispatch => ({
   dispatchFetchOneTour: id => dispatch(fetchOneTourById(id))
-});
+})
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(widthWidth(withStyles(styles)(TourPage)));
+)(widthWidth(withStyles(styles)(TourPage)))

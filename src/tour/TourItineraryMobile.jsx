@@ -1,16 +1,14 @@
-import React, { Component } from 'react';
-import SwipeableViews from 'react-swipeable-views';
-import SupportTouch from '../utils/SupportTouch';
+import React, { Component } from 'react'
+import SwipeableViews from 'react-swipeable-views'
+import SupportTouch from '../utils/SupportTouch'
 
 // Style
-import { withStyles } from '@material-ui/core/styles';
-import widthWidth from '../utils/withWidth';
-import Typography from '@material-ui/core/Typography';
-import MaterialIcon from '../utils/MaterialIcon';
-
+import { withStyles } from '@material-ui/core/styles'
+import widthWidth from '../utils/withWidth'
+import Typography from '@material-ui/core/Typography'
+import MaterialIcon from '../utils/MaterialIcon'
 
 class TourItineraryMobile extends Component {
-
   render() {
     const { classes, activities } = this.props
     return (
@@ -19,16 +17,26 @@ class TourItineraryMobile extends Component {
           {activities.map((activity, index) => (
             <div key={index} className={classes.slide}>
               <div className={classes.activityIcons}>
-                {activity.icon.map((item,index)=> (
+                {activity.icon.map((item, index) => (
                   <MaterialIcon key={index} iconName={item} />
                 ))}
               </div>
-              <Typography type='body1' className={[classes.activityName, classes.centerAlign].join(' ')}>{activity.name}</Typography>
-              <Typography type='subheading' className={classes.centerAlign}>{activity.time}</Typography>
+              <Typography
+                variant="body1"
+                className={[classes.activityName, classes.centerAlign].join(
+                  ' '
+                )}
+              >
+                {activity.name}
+              </Typography>
+              <Typography variant="subtitle2" className={classes.centerAlign}>
+                {activity.time}
+              </Typography>
               <div className={classes.activityNote}>
-                <Typography type='body1' className={classes.centerAlign} >{activity.note}</Typography>
+                <Typography variant="body1" className={classes.centerAlign}>
+                  {activity.note}
+                </Typography>
               </div>
-              
             </div>
           ))}
         </SwipeableViews>
@@ -40,7 +48,7 @@ class TourItineraryMobile extends Component {
 const styles = theme => ({
   swipeContainer: {
     padding: '0 18px',
-    '& >div >div':{
+    '& >div >div': {
       padding: '0 8px'
     }
   },
@@ -74,6 +82,6 @@ const styles = theme => ({
   centerAlign: {
     textAlign: 'center'
   }
-});
+})
 
-export default widthWidth(withStyles(styles)(TourItineraryMobile));
+export default widthWidth(withStyles(styles)(TourItineraryMobile))

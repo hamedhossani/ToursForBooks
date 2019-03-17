@@ -1,9 +1,9 @@
-import React from 'react';
+import React from 'react'
 
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
-import classNames from 'classnames';
-import Button from '@material-ui/core/Button';
+import classNames from 'classnames'
+import Button from '@material-ui/core/Button'
 
 // Define a custom style for button
 const styles = theme => ({
@@ -14,31 +14,33 @@ const styles = theme => ({
   },
   primary: {
     color: theme.palette.common.white,
-    backgroundColor: theme.palette.primary[500],
-    padding: `0px ${theme.spacing.unit*4}px`,
+    backgroundColor: theme.palette.primary.main,
+    padding: `0px ${theme.spacing.unit * 4}px`
   },
   secondary: {
     backgroundColor: theme.palette.common.transparent,
-    color: theme.palette.primary[500],
-    padding: `0px ${theme.spacing.unit*4}px`,
+    color: theme.palette.primary.light,
+    padding: `0px ${theme.spacing.unit * 4}px`
   },
   disabled: {
     opacity: 0.5
   }
-});
+})
 
 // Custom Button component with variant property
 function ActionButton(props) {
-  const { children, classes, className, variant, onClick, disabled } = props;
+  const { children, classes, className, variant, onClick, disabled } = props
   return (
-    <Button disabled={disabled} className={classNames(
+    <Button
+      disabled={disabled}
+      className={classNames(
         classes.button,
         {
           [classes.primary]: variant === 'primary',
-          [classes.secondary]: variant === 'secondary',
+          [classes.secondary]: variant === 'secondary'
         },
         'hide--on-print',
-        className,
+        className
       )}
       onClick={onClick}
       type="submit"
@@ -48,7 +50,7 @@ function ActionButton(props) {
     >
       {children}
     </Button>
-  );
+  )
 }
 
 ActionButton.propTypes = {
@@ -56,8 +58,8 @@ ActionButton.propTypes = {
   classes: PropTypes.object.isRequired,
   className: PropTypes.string,
   disabled: PropTypes.bool,
-  variant: PropTypes.oneOf(['primary','secondary']),
-};
+  variant: PropTypes.oneOf(['primary', 'secondary'])
+}
 
 // Inject style to Custom Button component
-export default withStyles(styles)(ActionButton);
+export default withStyles(styles)(ActionButton)
