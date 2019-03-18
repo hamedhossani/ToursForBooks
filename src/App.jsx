@@ -5,7 +5,7 @@ import { Route } from 'react-router-dom'
 import InitPage from './page/InitPage'
 import TourPage from './tour/TourPage'
 import AdminPage from './page/AdminPage'
-import SignInPage from './page/SignInPage'
+//import SignInPage from './page/SignInPage'
 
 // Style
 import { withStyles } from '@material-ui/core/styles'
