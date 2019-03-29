@@ -6,9 +6,9 @@ import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
 import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
-import ListElement from './utils/ListElement'
+import ListElement from './ListElement'
 
-import { fetchOneTourById, addTour, editTour } from '../tour/action'
+import { fetchOneTourById, addTour, editTour } from '../action'
 
 const InitialTourData = () => {
   return {
