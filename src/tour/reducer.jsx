@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 
-import { GET_INIT_TOURS, GET_ONE_TOUR } from './action'
+import { GET_INIT_TOURS, GET_ONE_TOUR,REMOVE_TOUR } from './action'
 
 function InitialToursReducer(
   state = {
@@ -16,6 +16,16 @@ function InitialToursReducer(
         tours,
         isInitial: true
       })
+     case REMOVE_TOUR:
+        console.log('REMOVE_TOUR');
+        console.log('state');
+        console.log(state);
+        const tourList = state.tours.filter(tour => tour.id !== action.id ); 
+          var resultTourDelete = Object.assign({}, state, {             
+            tours  : tourList,
+            OpenTourDeleteDialog : false
+        });             
+      return resultTourDelete;
     default:
       return state
   }
