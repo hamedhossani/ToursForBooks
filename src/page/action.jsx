@@ -15,7 +15,6 @@ export function fetchCurrentMessage(message) {
     }
 }
 export function fetchCloseMessage(event, reason) {
-    console.log(reason)
     return function (dispatch) {
         dispatch(closeMessage())
     }
