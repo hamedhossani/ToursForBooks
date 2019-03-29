@@ -1,37 +1,90 @@
 import React, { Component } from 'react'
-
+import { connect } from "react-redux";
 // Style
 import { withStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
 import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
+import ListElement from './utils/ListElement'
+
+import { fetchOneTourById, addTour, editTour } from '../tour/action'
+
+const InitialTourData = () => {
+  return {
+    activities: [],
+    boughts: 0,
+    description: '',
+    excludes: [],
+    highlights: [],
+    id: 0,
+    images: [],
+    includes: [],
+    lengths: {
+      byDay: '',
+      byHour: 0
+    },
+    name: '',
+    price: {
+      amount: 0,
+      currency: 'dollar',
+      discountAmount: 0,
+      type: 'adult',
+      unit: 'passenger'
+    },
+    type: '',
+    category: ''
+  };
+}
 
 class TourCreationForm extends Component {
-  state = {
-    currentTour: {
-      activities: [],
-      boughts: 0,
-      description: '',
-      excludes: [],
-      highlights: [],
-      id: 0,
-      images: [],
-      includes: [],
-      lengths: {
-        byDay: '',
-        byHour: 0
-      },
-      name: '',
-      price: {
-        amount: 0,
-        currency: 'dollar',
-        discountAmount: 0,
-        type: 'adult',
-        unit: 'passenger'
-      },
-      type: '',
-      category: ''
+
+  constructor(props) {
+    super(props);
+    this.handleSetIncludes = this.handleSetIncludes.bind(this);
+    this.handleUnSetIncludes = this.handleUnSetIncludes.bind(this);
+    this.handleSetExcludes = this.handleSetExcludes.bind(this);
+    this.handleUnSetExcludes = this.handleUnSetExcludes.bind(this);
+
+    this.state = {
+      currentTour: InitialTourData()
+    }
+    console.log('props tour add');
+    console.log(props);
+    if (this.props.id !== undefined)
+      this.props.dispatch(fetchOneTourById(this.props.id));
+  }
+  componentWillReceiveProps(newProps) {
+    console.log('componentWillReceiveProps newProps');
+    console.log(newProps);
+    if (newProps.id !== undefined) {
+      var tour = newProps.tour;
+      this.setState({
+        currentTour: {
+          activities: tour.activities || [],
+          boughts: tour.boughts || 0,
+          description: tour.description || '',
+          excludes: tour.excludes || [],
+          highlights: tour.highlights || [],
+          id: tour.id,
+          images: tour.images || [],
+          includes: tour.includes || [],
+          lengths: {
+            byDay: (tour.lengths) ? tour.lengths.byDay || '' : '',
+            byHour: (tour.lengths) ? tour.lengths.byHour || 0 : 0
+          },
+          name: tour.name || '',
+          price: {
+            amount: (tour.price) ? tour.price.amount || 0 : 0,
+            discountAmount: (tour.price) ? tour.price.discountAmount || 0 : 0,
+            currency: (tour.price !== undefined) ? tour.price.currency || 'dollar' : 'dollar',
+            type: (tour.price) ? tour.price.type || 'adult' : 'adult',
+            unit: (tour.price) ? tour.price.unit || 'passenger' : 'passenger'
+          },
+          type: tour.type || '',
+          category: tour.category || ''
+        }
+      });
     }
   }
   handleChange = name => event => {
@@ -40,10 +93,86 @@ class TourCreationForm extends Component {
       console.log('Error: Deep Object')
       return
     }
+    var val= event.target.value;
     if (props.length === 2) {
-      this.setState({ [props[0]]: { [props[1]]: event.target.value } })
+        this.setState(prevState => (
+        {currentTour:{
+          ...prevState.currentTour,
+          [props[0]]: { [props[1]]: val }
+          }
+        }
+      ));
+    } else {      
+      this.setState(prevState => (
+        {currentTour:{
+          ...prevState.currentTour,
+          [name]:val
+          }
+        }
+      ));
+    }
+  }
+  handleSetIncludes(item) {
+    this.setState(prevState => {
+      const list = prevState.currentTour.includes.push(item);
+      return { list };
+    });
+  }
+  handleUnSetIncludes(item) {
+    this.setState(prevState => {
+      const list = prevState.currentTour.includes.filter(el => el !== item);
+      prevState.currentTour.includes = list;
+      return { list };
+    });
+  }
+  handleSetExcludes(item) {
+    this.setState(prevState => {
+      const list = prevState.currentTour.excludes.push(item);
+      return { list };
+    });
+  }
+  handleUnSetExcludes(item) {
+    this.setState(prevState => {
+      const list = prevState.currentTour.excludes.filter(el => el !== item);
+      prevState.currentTour.excludes = list;
+      return { list };
+    });
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+
+    var tour = InitialTourData();
+    tour.id = this.state.currentTour.id;
+    tour.name = this.state.currentTour.name;
+    tour.type = this.state.currentTour.type;
+    tour.boughts = this.state.currentTour.boughts;
+    tour.description = this.state.currentTour.description;
+
+    tour.price.amount = this.state.currentTour.price.amount;
+    tour.price.discountAmount = this.state.currentTour.price.discountAmount;
+    tour.price.currency = this.state.currentTour.price.currency;
+    tour.price.type = this.state.currentTour.price.type;
+    tour.price.unit = this.state.currentTour.price.unit;
+
+    tour.lengths.byDay = this.state.currentTour.lengths.byDay;
+    tour.lengths.byHour = this.state.currentTour.lengths.byHour;
+
+    tour.excludes = this.state.currentTour.excludes;
+    tour.includes = this.state.currentTour.includes;
+
+    console.log('tour before submit');
+    console.log(tour);
+    //this.props.id === undefined ? this.props.addTour : this.props.editTour
+    if (this.props.id === undefined)//add
+    {
+      this.props.dispatch(addTour(tour)).then((e) => {
+        console.log('dispatch addTour');
+      });
     } else {
-      this.setState({ [name]: event.target.value })
+      this.props.dispatch(editTour(tour)).then((e) => {
+        console.log('dispatch edit Tour');
+      });
     }
   }
   render() {
@@ -94,8 +223,8 @@ class TourCreationForm extends Component {
             <TextField
               id="lengthsByDay"
               label="lengthsByDay"
-              value={this.state.currentTour.lengthsByDay}
-              onChange={this.handleChange('lengthsByDay')}
+              value={this.state.currentTour.lengths.byDay}
+              onChange={this.handleChange('lengths.byDay')}
               margin="normal"
               fullWidth
             />
@@ -104,20 +233,21 @@ class TourCreationForm extends Component {
             <TextField
               id="lengthsByHour"
               label="lengthsByHour"
-              value={this.state.currentTour.lengthsByHour}
-              onChange={this.handleChange('lengthsByHour')}
+              value={this.state.currentTour.lengths.byHour}
+              onChange={this.handleChange('lengths.byHour')}
               margin="normal"
               fullWidth
             />
           </Grid>
           <Grid item xs={4}>
             <TextField
-              id="bought"
-              label="bought"
-              value={this.state.currentTour.bought}
-              onChange={this.handleChange('bought')}
+              id="boughts"
+              label="boughts"
+              value={this.state.currentTour.boughts}
+              onChange={this.handleChange('boughts')}
               margin="normal"
               fullWidth
+              type="number"
             />
           </Grid>
           <Grid item xs={4}>
@@ -141,14 +271,29 @@ class TourCreationForm extends Component {
             />
           </Grid>
         </Grid>
+
+        <Grid container spacing={16}>
+          <Grid item xs={12} md={6}>
+            <ListElement title="Excludes" items={this.state.currentTour.excludes}
+              onSetHandle={this.handleSetExcludes}
+              onUnSetHandle={this.handleUnSetExcludes}
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <ListElement title='Includes' items={this.state.currentTour.includes}
+              onSetHandle={this.handleSetIncludes}
+              onUnSetHandle={this.handleUnSetIncludes}
+            />
+          </Grid>
+        </Grid>
         <Grid item xs={12}>
           <Grid container justify="flex-end">
             <Button
               variant="contained"
-              onClick={this.props.addTour}
-              disabled={!this.props.isAuthenticated}
+              onClick={this.handleSubmit.bind(this)}
+              disabled={(this.props.isAnthenticated !== true)}
             >
-              Add Tour
+              {this.props.id === undefined ? 'Add Tour' : 'Edit Tour'}
             </Button>
           </Grid>
         </Grid>
@@ -161,4 +306,16 @@ const styles = theme => ({
   container: {}
 })
 
-export default withStyles(styles)(TourCreationForm)
+//export default withStyles(styles)(TourCreationForm)
+const mapStateToProps = state => {
+  console.log('tour edit mapStateToProps state');
+  console.log(state);
+  // const {  message, messageOpen }  = state.MessageReducer.CurrentMessageReducer ; 
+  const { tour } = state.ToursReducer.CurrentToursReducer;
+
+  return {
+    tour: tour[0] || InitialTourData()
+  };
+};
+//  export default enhance(TourAdd);
+export default withStyles(styles)(connect(mapStateToProps)(TourCreationForm));
