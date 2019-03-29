@@ -1,10 +1,12 @@
 import SERVER_URI from '../config'
 import exampleTours from '../utils/example-tours'
-import { databaseRef} from '../admin/store/firebase'
+import { databaseRef,toursTestRef} from '../admin/store/firebase'
 
 export const GET_INIT_TOURS = 'GET_INITL_TOURS'
 export const GET_ONE_TOUR = 'GET_ONE_TOUR'
 export const REMOVE_TOUR = 'REMOVE_TOUR'
+export const ADD_TOUR = 'ADD_TOUR'
+export const EDIT_TOUR = 'EDIT_TOUR'
 
 const getInitialTours = tours => ({
   type: GET_INIT_TOURS,
@@ -17,6 +19,14 @@ const getOneTourById = tour => ({
 const _deleteTourById = (id) => ({
   type: REMOVE_TOUR,
   id
+})
+const _addTour = (tour) => ({
+  type: ADD_TOUR,
+  tour
+})
+const _editTour = (tour) => ({
+  type: EDIT_TOUR,
+  tour
 })
 // to-do: rebuilt fetching tour data
 
@@ -52,3 +62,20 @@ export function deleteTourById(id) {
       });
   }
 }
+export const addTour = (tour) => {
+  return (dispatch) => {
+      return databaseRef.child(`tours_test`).push(tour).then(ref => {
+          dispatch(_addTour({
+              id: ref.key,
+              ...tour
+          }));
+      });
+  };
+};
+export const editTour = (tour) => {
+  return (dispatch) => {  
+      return toursTestRef.child(tour.id).set(tour).then(ref => {
+          dispatch(_editTour(tour));
+      });
+  };
+};
